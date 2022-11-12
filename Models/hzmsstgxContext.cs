@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace comandas_api.Models
 {
-    public partial class hzmsstgxContext : DbContext
+    public partial class DataContext : DbContext
     {
-        public hzmsstgxContext()
+        public DataContext()
         {
         }
 
-        public hzmsstgxContext(DbContextOptions<hzmsstgxContext> options)
+        public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
         }
@@ -24,7 +24,6 @@ namespace comandas_api.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseNpgsql("DefaultConnection");
             }
         }
@@ -99,6 +98,8 @@ namespace comandas_api.Models
                 entity.Property(e => e.DeliveredAt)
                     .HasColumnType("timestamp without time zone")
                     .HasColumnName("delivered_at");
+
+                entity.Property(e => e.Description).HasColumnName("description");
 
                 entity.Property(e => e.RestaurantId).HasColumnName("restaurant_id");
 

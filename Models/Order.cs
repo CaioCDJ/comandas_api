@@ -11,6 +11,7 @@ namespace comandas_api.Models
         public DateTime? DeliveredAt { get; set; }
         public string ClientId { get; set; } = null!;
         public string RestaurantId { get; set; } = null!;
+        public string? Description { get; set; }
 
         public virtual Client Client { get; set; } = null!;
         public virtual Restaurant Restaurant { get; set; } = null!;
