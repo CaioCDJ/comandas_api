@@ -1,7 +1,7 @@
 using FluentValidation;
 using comandas_api.Models.DTOs;
 
-public class newClientValidation : AbstractValidator<newClientDTO>{
+public class newClientValidation : AbstractValidator<ClientDTO>{
 
   public newClientValidation(){
 

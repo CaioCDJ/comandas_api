@@ -1,7 +1,7 @@
 
 namespace comandas_api.Models.DTOs;
 
-public class newClientDTO{
+public class ClientDTO{
 
   public string firstName { get; set; }
   public string lastName { get; set; }
