@@ -39,30 +39,48 @@ public class ClientController : ControllerBase{
 
   [HttpPost]
   public async Task<IActionResult> newClient([FromBody] ClientDTO clientDTO){
+  
+    bool exists = await _repository.exists(new LoginDTO {
+        email = clientDTO.email,
+        password = clientDTO.password
+    });
 
-    return BadRequest(clientDTO);
+    if(exists == true) return BadRequest("email ou senha existente");
+    
+    var client = await _repository.newClient(clientDTO);
+
+    return Ok(client);
   }
 
   [HttpPatch]
   [Route("{id}/password")]
   public async Task<IActionResult> updatePassword(
-      [FromRoute] string id, [FromBody] PasswordUpdate passwordUpdate ){
+      [FromRoute] string id, [FromBody] PasswordUpdate passwordUpdate){
     
-    return BadRequest();
+    await _repository.changePassword(id, passwordUpdate);
+
+    
+    return Ok();
   }
   
   [HttpPut]
   [Route("{id}")]
   public async Task<IActionResult> updateClient([FromRoute] string id, [FromBody] ClientDTO clientDTO){
-    
-    return NotFound();
+   
+    var client = await _repository.getUser(id);
+
+    if (client is null) return NotFound();
+  
+    return BadRequest();
   }
 
   [HttpDelete]
   [Route("{id}")]
   public async Task<IActionResult> deleteClient([FromRoute] string id){
     
-    return NotFound(id);
+    await _repository.remove(id);
+
+    return Ok("Usuario deletado");
   }
 
 }

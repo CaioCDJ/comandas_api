@@ -39,6 +39,25 @@ public class ClientRepository{
 
   */
   
+  public async Task<Client> newClient(ClientDTO clientDTO){
+
+    string newId = Guid.NewGuid().ToString();
+
+    _context.Clients.Add(new Client{
+      Id = newId,
+      FirstName = clientDTO.firstName,
+      LastName = clientDTO.lastName,
+      Email = clientDTO.email,
+      PhoneNumber = clientDTO.phoneNumber, 
+      Cpf = clientDTO.cpf,
+      Password = clientDTO.password
+    });
+    
+    await _context.SaveChangesAsync();
+
+    return await getUser(newId);
+  }
+
   public async Task<Client> changePassword(string id,PasswordUpdate passwordUpdateDTO ){
     
     Client user =  await getUser(id);
@@ -51,6 +70,7 @@ public class ClientRepository{
 
     return user;
   }
+
 
   public async Task remove(string id){
 

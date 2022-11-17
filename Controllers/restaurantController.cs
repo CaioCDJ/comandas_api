@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using comandas_api.Models;
 using comandas_api.Models.DTOs;
+using comandas_api.Repositories;
 
 namespace comandas_api.Controllers;
 
@@ -7,17 +9,27 @@ namespace comandas_api.Controllers;
 [Route("[controller]")]
 public class RestaurantController : ControllerBase{
 
+  private readonly RestaurantRepository _repository;
+
+  public RestaurantController(){
+    _repository = new RestaurantRepository();
+  }
+
   [HttpGet]
   [Route("{id}")]
   public async Task<IActionResult> getResturant([FromRoute]string id){
-    
-    return BadRequest();
 
+    var restaurant = await _repository.getRestaurant(id);
+
+    return (restaurant is not null) 
+      ? Ok(restaurant)
+      : NotFound("Restaurante não encontrodo");
   }
  
   [HttpGet]
   [Route("{id}/orders")] 
   public async Task<IActionResult> getOrders([FromRoute]string id){
+
 
     return Ok();
   }
