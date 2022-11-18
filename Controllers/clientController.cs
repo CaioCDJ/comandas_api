@@ -6,7 +6,7 @@ using comandas_api.Repositories;
 namespace comandas_api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class ClientController : ControllerBase{
 
   private readonly ClientRepository  _repository;
@@ -34,22 +34,38 @@ public class ClientController : ControllerBase{
   [Route("{id}/orders")]
   public async Task<IActionResult> getClientOrders([FromRoute] string id){
 
-    return NotFound();
+    var orders = await _repository.getOrders(id);
+
+    return (orders is not null)
+      ? Ok(orders) 
+      : NotFound();
   }
 
   [HttpPost]
-  public async Task<IActionResult> newClient([FromBody] ClientDTO clientDTO){
-  
-    bool exists = await _repository.exists(new LoginDTO {
+  public async Task<IActionResult> newClient(ClientDTO clientDTO){
+ 
+    if(!ModelState.IsValid)
+      return NoContent();
+
+    Console.WriteLine("ola");
+
+    try{
+      var exists = await _repository.exists(new LoginDTO {
         email = clientDTO.email,
         password = clientDTO.password
     });
 
-    if(exists == true) return BadRequest("email ou senha existente");
+
+
+    if(exists is not null) return BadRequest("email ou senha existente");
     
     var client = await _repository.newClient(clientDTO);
 
     return Ok(client);
+
+    }catch(Exception e){
+      throw e;
+    }
   }
 
   [HttpPatch]

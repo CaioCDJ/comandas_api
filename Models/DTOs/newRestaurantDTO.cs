@@ -1,4 +1,4 @@
-using comandas_api.Models.DTOs;
+namespace comandas_api.Models.DTOs;
 
 public class NewRestaurantDTO{
   

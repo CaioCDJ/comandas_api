@@ -9,6 +9,7 @@ public class newClientValidation : AbstractValidator<ClientDTO>{
     RuleFor(x=>x.lastName).NotEmpty().NotNull();
     RuleFor(x=>x.email).NotNull().NotEmpty().EmailAddress();
     RuleFor(x=>x.password).NotEmpty().NotNull().MinimumLength(5);
+    RuleFor(x=>x.cpf).NotEmpty();
   }
 
 }

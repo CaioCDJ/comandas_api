@@ -13,42 +13,36 @@ public class ClientRepository{
   }
 
   public async Task<Client> getUser(string id) =>
-    await _context.Clients?.FirstOrDefaultAsync( x => x.Id == id);    
+    await _context.Clients?.SingleOrDefaultAsync( x => x.Id == id);    
 
-  public async Task<bool> exists(LoginDTO login){
-
-    Client client = await _context.Clients.FirstOrDefaultAsync(x => 
+  public async Task<Client> exists(LoginDTO login){
+    Client client = await _context.Clients?.SingleOrDefaultAsync(x => 
         x.Email == login.email && x.Password == login.password);
 
-    if(client is not null){
-      return true;
-    } 
-    else{
-      return false;
-    }
+   return client;
   }
 
-  /*
-  // criar um dto de resposta
-  public async Task<T> getOrders(string id){
-    return await _context.Orders
+  public async Task<List<Order>> getOrders(string id){
+   
+    var orders = await _context.Orders
       .Where(x=> x.ClientId == id)
-      .Include(x=>x.Restaurant.Name)
-      .ToListAsync();
+      .Include(x=> x.Restaurant.Name).ToListAsync();
+  
+    return orders; 
+    
   }
-
-  */
   
   public async Task<Client> newClient(ClientDTO clientDTO){
 
     string newId = Guid.NewGuid().ToString();
+
+    Console.WriteLine(newId);
 
     _context.Clients.Add(new Client{
       Id = newId,
       FirstName = clientDTO.firstName,
       LastName = clientDTO.lastName,
       Email = clientDTO.email,
-      PhoneNumber = clientDTO.phoneNumber, 
       Cpf = clientDTO.cpf,
       Password = clientDTO.password
     });

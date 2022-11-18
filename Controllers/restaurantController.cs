@@ -25,7 +25,64 @@ public class RestaurantController : ControllerBase{
       ? Ok(restaurant)
       : NotFound("Restaurante não encontrodo");
   }
- 
+
+  [HttpPost]
+  public async Task<IActionResult> newResturant([FromBody]NewRestaurantDTO restaurantDTO){
+
+    bool isCreated = await _repository.newRestaurant(restaurantDTO);
+
+    return isCreated
+      ? Ok()
+      : BadRequest();
+  }
+
+  [HttpPut]
+  [Route("{id}")]
+  public async Task<IActionResult> update([FromRoute]string id, [FromBody]NewRestaurantDTO restaurantDTO){
+
+    var restaurant = await _repository.getRestaurant(id);
+    
+    if(restaurant is null) return NotFound();
+
+    // mapear objetos
+
+    return Ok();
+  }
+  
+  [HttpPatch]
+  [Route("{id}/passwod")]
+  public async Task<IActionResult> updatePassword([FromRoute]string id, [FromBody] PasswordUpdate passwordUpdateDTO){
+
+    var restaurant = await _repository.getRestaurant(id);
+    
+    if(restaurant is null) return NotFound();
+
+    if(passwordUpdateDTO.password != restaurant.Password){ 
+      return BadRequest("Senha incorreta");
+    }
+
+    restaurant.Password = passwordUpdateDTO.newPassword;
+
+    await _repository.Update(restaurant);
+
+    return Ok();
+  }
+
+  [HttpDelete]
+  [Route("{id}")]
+  public async Task<IActionResult> deleteResturant([FromRoute]string id){
+   
+    Restaurant restaurant =  await _repository.getRestaurant(id);
+
+    if(restaurant is null) return NotFound("Conta não encontroda.");
+
+    await _repository.remove(restaurant);
+
+    return Ok();
+  }
+
+  // -- Order section --
+
   [HttpGet]
   [Route("{id}/orders")] 
   public async Task<IActionResult> getOrders([FromRoute]string id){
@@ -35,27 +92,16 @@ public class RestaurantController : ControllerBase{
   }
 
   [HttpPost]
-  public async Task<IActionResult> newResturant(){
+  [Route("{id}/order")]
+  public async Task<IActionResult> order([FromRoute]string id,[FromBody]NewOrderDTO newOrderDTO){
     
-    return Ok();
-  }
+    Restaurant restaurant =  await _repository.getRestaurant(id);
 
-  [HttpPut]
-  [Route("{id}")]
-  public async Task<IActionResult> updateResturant(){
-    return Ok();
-  }
+    if(restaurant is null) return NotFound("Conta não encontroda.");
   
-  [HttpPatch]
-  [Route("{id}")]
-  public async Task<IActionResult> updatePassword(){
-    return NotFound();
-  }
+     
 
-  [HttpDelete]
-  [Route("{id}")]
-  public async Task<IActionResult> deleteResturant(){
     return Ok();
-  }
+  }  
 
 }

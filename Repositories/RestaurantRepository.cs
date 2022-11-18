@@ -26,7 +26,7 @@ public class RestaurantRepository{
       : false;
   }
 
-  public async Task<Restaurant> newRestaurant(NewRestaurantDTO restaurantDTO){
+  public async Task<bool> newRestaurant(NewRestaurantDTO restaurantDTO){
 
     string id = Guid.NewGuid().ToString();
 
@@ -42,12 +42,22 @@ public class RestaurantRepository{
 
     await _context.SaveChangesAsync();
 
-    return await getRestaurant(id);
+    var restaurant = await getRestaurant(id);
+
+    return (restaurant is not null)
+      ? true
+      : false;
   }
 
-  public async Task remove(string id){
+  public async Task Update(Restaurant restaurant){
+ 
+    _context.Restaurants.Update(restaurant);
 
-    Restaurant restaurant = await getRestaurant(id);
+    await _context.SaveChangesAsync();
+
+  }
+
+  public async Task remove(Restaurant restaurant){
 
     _context.Restaurants.Remove(restaurant);
 
