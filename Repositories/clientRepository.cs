@@ -16,7 +16,7 @@ public class ClientRepository{
     await _context.Clients?.SingleOrDefaultAsync( x => x.Id == id);    
 
   public async Task<Client> exists(LoginDTO login){
-    Client client = await _context.Clients?.SingleOrDefaultAsync(x => 
+      Client? client = await _context.Clients.SingleOrDefaultAsync(x => 
         x.Email == login.email && x.Password == login.password);
 
    return client;

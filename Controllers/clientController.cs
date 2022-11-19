@@ -47,15 +47,13 @@ public class ClientController : ControllerBase{
     if(!ModelState.IsValid)
       return NoContent();
 
-    Console.WriteLine("ola");
-
     try{
       var exists = await _repository.exists(new LoginDTO {
         email = clientDTO.email,
         password = clientDTO.password
     });
 
-
+    Console.WriteLine("ola");
 
     if(exists is not null) return BadRequest("email ou senha existente");
     
@@ -64,7 +62,8 @@ public class ClientController : ControllerBase{
     return Ok(client);
 
     }catch(Exception e){
-      throw e;
+      Console.WriteLine("\n"+e.Message+"\n");
+      throw ;
     }
   }
 

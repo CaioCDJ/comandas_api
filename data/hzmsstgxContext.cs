@@ -7,6 +7,8 @@ namespace comandas_api.Models
 {
     public partial class DataContext : DbContext
     {
+        private string connectionString;
+        
         public DataContext()
         {
         }
@@ -14,17 +16,19 @@ namespace comandas_api.Models
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
+          
         }
 
         public virtual DbSet<Client> Clients { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<Restaurant> Restaurants { get; set; } = null!;
 
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql("DefaultConnection");
+                optionsBuilder.UseNpgsql();
             }
         }
 
