@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace comandas_api.Models
-{
+namespace comandas_api.Models;
     public partial class DataContext : DbContext
     {
-        private string connectionString;
-        
         public DataContext()
         {
         }
@@ -16,19 +13,18 @@ namespace comandas_api.Models
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
-          
         }
 
         public virtual DbSet<Client> Clients { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<Restaurant> Restaurants { get; set; } = null!;
 
-        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql();
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseNpgsql("Host=motty.db.elephantsql.com;Database=hzmsstgx;Username=hzmsstgx;Password=QvUtIDP6m8W_-HNQqDoMPe-AmEchXx0d");
             }
         }
 
@@ -89,11 +85,15 @@ namespace comandas_api.Models
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.ToTable("order");
+                entity.ToTable("orders");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.ClientId).HasColumnName("client_id");
+
+                entity.Property(e => e.Code)
+                    .HasColumnType("character varying")
+                    .HasColumnName("code");
 
                 entity.Property(e => e.CreatedAt)
                     .HasColumnType("timestamp without time zone")
@@ -156,4 +156,3 @@ namespace comandas_api.Models
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
-}

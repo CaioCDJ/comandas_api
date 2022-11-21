@@ -1,6 +1,4 @@
-using comandas_api.Models;
 using comandas_api.Models.DTOs;
-using Microsoft.EntityFrameworkCore;
 
 public class RestaurantRepository{
 

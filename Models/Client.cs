@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace comandas_api.Models;
 
-namespace comandas_api.Models
-{
     public partial class Client
     {
         public Client()
@@ -21,4 +18,3 @@ namespace comandas_api.Models
 
         public virtual ICollection<Order> Orders { get; set; }
     }
-}
