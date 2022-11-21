@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using comandas_api.Models;
 using comandas_api.Models.DTOs;
 using comandas_api.Repositories;
+using comandas_api.Mappers;
 
 namespace comandas_api.Controllers;
 
@@ -27,7 +28,7 @@ public class RestaurantController : ControllerBase{
   }
 
   [HttpPost]
-  public async Task<IActionResult> newResturant([FromBody]NewRestaurantDTO restaurantDTO){
+ public async Task<IActionResult> newResturant([FromBody]NewRestaurantDTO restaurantDTO){
 
     bool isCreated = await _repository.newRestaurant(restaurantDTO);
 
@@ -98,10 +99,18 @@ public class RestaurantController : ControllerBase{
     Restaurant restaurant =  await _repository.getRestaurant(id);
 
     if(restaurant is null) return NotFound("Conta não encontroda.");
-  
-     
+    
+    var client = await _repository.getClientByCpf(newOrderDTO.client_cpf);
 
-    return Ok();
+    if(client is null) return BadRequest();
+
+    Order newOrder = OrderMapper.toOrder(newOrderDTO);
+
+    newOrder.RestaurantId = id;
+
+    newOrder = await _repository.newOrder(newOrder);
+
+    return Ok(newOrder);
   }  
 
 }

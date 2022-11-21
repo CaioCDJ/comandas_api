@@ -20,6 +20,10 @@ public class ClientRepository{
    return client;
   }
 
+  public async Task<Order> getLastOrder(string id)
+    => await _context.Orders.SingleOrDefaultAsync( x =>
+        x.ClientId == id && x.Status == false);
+
   public async Task<List<Order>> getOrders(string id){
    
     var orders = await _context.Orders

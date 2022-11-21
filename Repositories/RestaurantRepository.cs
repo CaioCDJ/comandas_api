@@ -61,5 +61,15 @@ public class RestaurantRepository{
 
     await _context.SaveChangesAsync();
   }
+ 
+  public async Task<Client>getClientByCpf(int cpf)
+    => await _context.Clients.SingleOrDefaultAsync(x=> x.Cpf == cpf);
 
+ 
+  public async Task<Order> newOrder(Order newOrder){
+    await _context.Orders.AddAsync(newOrder);
+    await _context.SaveChangesAsync();
+
+    return await _context.Orders.SingleOrDefaultAsync( x=> x.Id == newOrder.Id );
+  }
 }

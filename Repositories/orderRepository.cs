@@ -28,6 +28,7 @@ public class OrderRepository{
     }
     
     order.Status = true;
+    order.DeliveredAt = DateTime.Now;
 
     _context.Update(order);
 

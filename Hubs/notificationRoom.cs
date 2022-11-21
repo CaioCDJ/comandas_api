@@ -11,11 +11,11 @@ public class NotificationRoom : Hub{
   static List<ConnectionModel> orderChat = new List<ConnectionModel>();
 
   public NotificationRoom(){
-
     _orderRepository = new OrderRepository();
     _clientRepository  = new ClientRepository();
   }
 
+  [HubMethodName("connect")]
   public async Task connect(string id, string role){
 
     if( role == "client"){
@@ -32,6 +32,7 @@ public class NotificationRoom : Hub{
     }
   }
   
+  [HubMethodName("orderUpdate")]
   public async Task OrderUpdate( string orderId ){
 
     try{

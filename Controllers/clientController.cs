@@ -41,6 +41,22 @@ public class ClientController : ControllerBase{
       : NotFound();
   }
 
+  [HttpGet]
+  [Route("{id}/lastOrder")]
+  public async Task<IActionResult> getLastOrder([FromRoute] string id){
+    
+    var client  = await _repository.getUser(id);
+
+    if( client is null ) return NotFound("Clinte não encontrado");
+
+    var order = await _repository.getLastOrder(id);
+
+    return (order is not null)
+      ? Ok(order)
+      : NotFound("Pedido não encontrado");
+
+  }
+
   [HttpPost]
   public async Task<IActionResult> newClient(ClientDTO clientDTO){
  
@@ -73,7 +89,6 @@ public class ClientController : ControllerBase{
       [FromRoute] string id, [FromBody] PasswordUpdate passwordUpdate){
     
     await _repository.changePassword(id, passwordUpdate);
-
     
     return Ok();
   }
