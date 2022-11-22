@@ -20,13 +20,12 @@ public class ClientController : ControllerBase{
   public async Task<IActionResult> getClient([FromRoute] string id){
 
     Client client = await _repository.getUser(id);
-
-    if(client is null){
-      return NotFound();
-    }
-    else{
-      return Ok(client);
-    }
+    
+    Console.WriteLine(client.FirstName);
+    
+    return (client is not null)
+      ? Ok(client)
+      : NotFound();
 
   }
   

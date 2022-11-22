@@ -7,7 +7,7 @@ using comandas_api.Mappers;
 namespace comandas_api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class RestaurantController : ControllerBase{
 
   private readonly RestaurantRepository _repository;

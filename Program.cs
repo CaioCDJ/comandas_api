@@ -31,4 +31,4 @@ app.MapControllers();
 
 app.MapHub<NotificationRoom>("notificationRoom");
 
- app.Run();
+app.Run();

@@ -13,6 +13,7 @@ namespace comandas_api.Models;
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
+          
         }
 
         public virtual DbSet<Client> Clients { get; set; } = null!;
@@ -23,8 +24,14 @@ namespace comandas_api.Models;
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseNpgsql("Host=motty.db.elephantsql.com;Database=hzmsstgx;Username=hzmsstgx;Password=QvUtIDP6m8W_-HNQqDoMPe-AmEchXx0d");
+                IConfigurationRoot config = new ConfigurationBuilder()
+                  .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                  .AddJsonFile("appsettings.json")
+                  .Build();
+                
+                var connectionString = config.GetConnectionString("DefaultConnection");
+
+                optionsBuilder.UseNpgsql(connectionString);
             }
         }
 

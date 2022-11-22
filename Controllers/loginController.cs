@@ -3,7 +3,7 @@ using comandas_api.Models.DTOs;
 using comandas_api.Repositories;
 
 [ApiController]
-[Route("login")]
+[Route("api/login")]
 public class LoginController : ControllerBase {
   
   private readonly LoginRepository _repository;
