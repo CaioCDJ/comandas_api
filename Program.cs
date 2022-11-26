@@ -29,6 +29,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapHub<NotificationRoom>("notificationRoom");
+app.MapHub<NotificationRoom>("/notificationRoom");
 
 app.Run();

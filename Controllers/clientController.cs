@@ -63,18 +63,14 @@ public class ClientController : ControllerBase{
       return NoContent();
 
     try{
-      var exists = await _repository.exists(new LoginDTO {
-        email = clientDTO.email,
-        password = clientDTO.password
-    });
+     
+      var exists = await _repository.exists(clientDTO);
 
-    Console.WriteLine("ola");
-
-    if(exists is not null) return BadRequest("email ou senha existente");
+      if(exists is not null) return BadRequest("email ou senha existente");
     
-    var client = await _repository.newClient(clientDTO);
+      var client = await _repository.newClient(clientDTO);
 
-    return Ok(client);
+      return Ok(client);
 
     }catch(Exception e){
       Console.WriteLine("\n"+e.Message+"\n");

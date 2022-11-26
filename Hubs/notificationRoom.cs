@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.SignalR;
 using comandas_api.Models.DTOs;
 using comandas_api.Repositories;
 
-
 public class NotificationRoom : Hub{
 
   private readonly ClientRepository _clientRepository;
@@ -15,9 +14,8 @@ public class NotificationRoom : Hub{
     _clientRepository  = new ClientRepository();
   }
 
-  [HubMethodName("connect")]
   public async Task connect(string id, string role){
-
+    System.Console.WriteLine("entrou");
     if( role == "client"){
       
       var connectId = Context.ConnectionId;
@@ -32,18 +30,18 @@ public class NotificationRoom : Hub{
     }
   }
   
-  [HubMethodName("orderUpdate")]
   public async Task OrderUpdate( string orderId ){
 
     try{
 
       var connectId = Context.ConnectionId;
-
-      var client = orderChat.SingleOrDefault( x => x.orderID == orderId );
-    
+        
       await _orderRepository.statusUpdate(orderId);
+      var order = await _orderRepository.getById(orderId);
 
-      await Clients.Client(client.id).SendAsync("OrderUpdate");
+      var client = orderChat.SingleOrDefault( x => x.userID == order.ClientId);
+      
+      await Clients.Client(client.id).SendAsync("orderUpdate");
 
     }catch(Exception e){
     

@@ -11,21 +11,21 @@ public class ClientRepository{
   }
 
   public async Task<Client> getUser(string id) =>
-    await _context.Clients?.SingleOrDefaultAsync( x => x.Id == id);    
+    await _context.Clients?.SingleOrDefaultAsync( x => x.Id == id );    
+ 
 
-  public async Task<Client> exists(LoginDTO login){
-      Client? client = await _context.Clients.SingleOrDefaultAsync(x => 
-        x.Email == login.email && x.Password == login.password);
-
-   return client;
-  }
+  public async Task<Client> exists (ClientDTO clientDTO)
+    => await _context.Clients.SingleOrDefaultAsync( x=> 
+        x.Email == clientDTO.email
+        || x.Password == clientDTO.password
+        || x.Cpf == clientDTO.cpf );
 
   public async Task<Order> getLastOrder(string id)
     => await _context.Orders.SingleOrDefaultAsync( x =>
         x.ClientId == id && x.Status == false);
 
   public async Task<List<Order>> getOrders(string id){
-   
+
     var orders = await _context.Orders
       .Where(x=> x.ClientId == id)
       .Include(x=> x.Restaurant.Name).ToListAsync();
